@@ -4,12 +4,20 @@ import { ShoppingCart } from "lucide-react";
 import MenuTabs from "./components/menu-tabs";
 import { fetchDishes } from "@/api/listdish";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 export default function Page() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["restaurant"],
     queryFn: fetchDishes,
   });
+
+  const [itemCounts, setItemCounts] = useState<{ [key: string]: number }>({});
+
+  const totalItems = Object.values(itemCounts).reduce(
+    (sum, count) => sum + count,
+    0
+  );
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading menu</div>;
@@ -27,13 +35,13 @@ export default function Page() {
           <div className="relative">
             <ShoppingCart className="w-6 h-6" />
             <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-              0
+              {totalItems}
             </span>
           </div>
         </div>
       </header>
 
-      <MenuTabs />
+      <MenuTabs itemCounts={itemCounts} setItemCounts={setItemCounts} />
     </div>
   );
 }

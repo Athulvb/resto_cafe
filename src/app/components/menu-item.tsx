@@ -1,12 +1,20 @@
 import Image from "next/image";
 import { Minus, Plus } from "lucide-react";
 import { Categorydish } from "@/api/listdish";
-import { useState } from "react";
 
-export default function MenuItem({ items }: { items: Categorydish[] }) {
-  // Add state to track counts for each item
-  const [itemCounts, setItemCounts] = useState<{ [key: string]: number }>({});
+interface MenuItemProps {
+  items: Categorydish[];
+  itemCounts: { [key: string]: number };
+  setItemCounts: React.Dispatch<
+    React.SetStateAction<{ [key: string]: number }>
+  >;
+}
 
+export default function MenuItem({
+  items,
+  itemCounts,
+  setItemCounts,
+}: MenuItemProps) {
   // Add handlers for increment and decrement
   const handleIncrement = (dishId: string) => {
     setItemCounts((prev) => ({

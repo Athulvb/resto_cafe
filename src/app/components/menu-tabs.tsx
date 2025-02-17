@@ -6,7 +6,14 @@ import { fetchDishes } from "@/api/listdish";
 import { useQuery } from "@tanstack/react-query";
 import MenuItem from "./menu-item";
 
-export default function MenuTabs() {
+interface MenuTabsProps {
+  itemCounts: { [key: string]: number };
+  setItemCounts: React.Dispatch<
+    React.SetStateAction<{ [key: string]: number }>
+  >;
+}
+
+export default function MenuTabs({ itemCounts, setItemCounts }: MenuTabsProps) {
   const { data: categoriesData } = useQuery({
     queryKey: ["restaurant"],
     queryFn: fetchDishes,
@@ -35,7 +42,11 @@ export default function MenuTabs() {
           value={category.menu_category}
           className="w-full"
         >
-          <MenuItem items={category.category_dishes} />
+          <MenuItem
+            items={category.category_dishes}
+            itemCounts={itemCounts}
+            setItemCounts={setItemCounts}
+          />
         </TabsContent>
       ))}
     </Tabs>
